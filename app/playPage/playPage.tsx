@@ -7,6 +7,7 @@ export function PlayPage() {
   const [gameState, setGameState] = useState<stateProp>("ready");
   const [problem, setProblem] = useState<string[]>([]);
   const [index, setIndex] = useState<number>(0);
+  const [missType, setMissType] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(3);
   const [charNum, setCharNum] = useState<number>(10);
   const generateRandomString = (): string => {
@@ -14,6 +15,7 @@ export function PlayPage() {
     return str.length < charNum ? str + "a".repeat(charNum - str.length) : str;
   };
   useEffect(() => {
+    if (gameState !== "countDown") return;
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -25,7 +27,7 @@ export function PlayPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [gameState]);
 
   useEffect(() => {
     const handleKeyboard = (event: KeyboardEvent) => {
@@ -40,10 +42,11 @@ export function PlayPage() {
       }
       if (problem && event.key === problem[index]) {
         setIndex(index + 1);
-        if(index === charNum)
-        {
+        if (index === charNum-1) {
           setGameState("result");
         }
+      } else {
+        setMissType(missType + 1);
       }
     };
 
@@ -52,7 +55,7 @@ export function PlayPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, [gameState, index, problem]);
+  }, [gameState, index, problem,missType]);
 
   return (
     <div className="pt-16 pb-4 flex justify-center">
