@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { GameStateDisplay } from "~/components/gameStateDisplay";
+import { GameStateDisplay } from "~/components/GameStateDisplay";
+import { getDifficulty } from "~/utils/getDifficulty";
 
 export type stateProp = "ready" | "countDown" | "play" | "result";
 
@@ -9,7 +10,10 @@ export function PlayPage() {
   const [index, setIndex] = useState<number>(0);
   const [missType, setMissType] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(3);
-  const [charNum, setCharNum] = useState<number>(10);
+
+   const difficulty = getDifficulty();
+   const charNum = difficulty === "easy" ? 10 : 50;
+
   const generateRandomString = (): string => {
     const str = Math.random().toString(36).substring(2).slice(-charNum);
     return str.length < charNum ? str + "a".repeat(charNum - str.length) : str;
@@ -40,9 +44,9 @@ export function PlayPage() {
         setGameState("ready");
         setIndex(0);
       }
-      if (problem && event.key === problem[index]) {
+      if (gameState === "play" && problem && event.key === problem[index]) {
         setIndex(index + 1);
-        if (index === charNum-1) {
+        if (index === charNum - 1) {
           setGameState("result");
         }
       } else {
@@ -55,8 +59,8 @@ export function PlayPage() {
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, [gameState, index, problem,missType]);
-
+  }, [gameState, index, problem, missType]);
+  console.log(problem);
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <GameStateDisplay
@@ -64,6 +68,7 @@ export function PlayPage() {
         timeLeft={timeLeft}
         index={index}
         problem={problem}
+        missType={missType}
       />
     </div>
   );

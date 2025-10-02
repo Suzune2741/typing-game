@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import type { stateProp } from "~/playPage/playPage";
+import type { stateProp } from "~/pages/PlayPage";
 
 type GameStateProps = {
   gameState: stateProp;

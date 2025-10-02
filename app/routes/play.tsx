@@ -1,4 +1,4 @@
-import { PlayPage } from "~/playPage/playPage";
+import { PlayPage } from "~/pages/PlayPage";
 
 export default function Play() {
   return <PlayPage />;
