@@ -21,7 +21,7 @@ export function TopPage() {
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <div className="space-y-5">
-        <div className="text-2xl place-self-center-safe">Typing Game</div>
+        <div className="text-3xl place-self-center-safe">Typing Game</div>
         <div className="space-x-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"

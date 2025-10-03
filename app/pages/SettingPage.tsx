@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import DifficultySelectModal from "~/components/modals/DifficultySelectModal";
-import SetNameModal from "~/components/modals/setNameModal";
+import SetNameModal from "~/components/modals/SetNameModal";
 import { getUserName } from "~/utils/getUserName";
 
 export const SettingPage = () => {
@@ -17,10 +17,10 @@ export const SettingPage = () => {
   const userName = getUserName("userName", "名無しさん");
 
   return (
-    <>
+    <div className="pt-16 pb-4">
       <div className="text-3xl place-self-center-safe mb-5">設定</div>
-      <div className="flex gap-5 justify-center mb-4">
-        ユーザー名:{userName}
+      <div className="flex gap-3 justify-center mb-4">
+        ユーザー名:{" "}{userName}
         <button onClick={() => setOpenNameModal(true)}>
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white hover:text-gray-600"
@@ -65,6 +65,6 @@ export const SettingPage = () => {
         setDifficulty={setDifficulty}
       />
       <SetNameModal modalIsOpen={openNameModal} setIsOpen={setOpenNameModal} />
-    </>
+    </div>
   );
 };
