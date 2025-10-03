@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { GameStateDisplay } from "~/components/GameStateDisplay";
 import { getDifficulty } from "~/utils/getDifficulty";
 
@@ -11,13 +12,15 @@ export function PlayPage() {
   const [missType, setMissType] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(3);
 
-   const difficulty = getDifficulty();
-   const charNum = difficulty === "easy" ? 10 : 50;
+  const difficulty = getDifficulty();
+  const charNum = difficulty === "easy" ? 10 : 50;
 
+  
   const generateRandomString = (): string => {
     const str = Math.random().toString(36).substring(2).slice(-charNum);
     return str.length < charNum ? str + "a".repeat(charNum - str.length) : str;
   };
+
   useEffect(() => {
     if (gameState !== "countDown") return;
     const timer = setInterval(() => {
@@ -60,7 +63,7 @@ export function PlayPage() {
       document.removeEventListener("keydown", handleKeyboard);
     };
   }, [gameState, index, problem, missType]);
-  console.log(problem);
+
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <GameStateDisplay

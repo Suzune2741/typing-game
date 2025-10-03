@@ -1,6 +1,10 @@
-import React from "react";
+import firebase from "firebase/compat/app";
+import "firebase/compat/database";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import type { stateProp } from "~/pages/PlayPage";
+import { getDifficulty } from "~/utils/getDifficulty";
+import { getUserName } from "~/utils/getUserName";
 
 type GameStateProps = {
   gameState: stateProp;
@@ -17,6 +21,33 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
   missType = 0,
   problem = [],
 }) => {
+  const [hasResultPosted, setHasResultPosted] = useState(false);
+  const room = "results";
+  const difficulty = getDifficulty();
+  const userName = getUserName("userName", "名無しさん");
+
+  useEffect(() => {
+    if (gameState === "result" && firebase.apps.length && !hasResultPosted) {
+      const database = firebase.database();
+
+      database
+        .ref(room)
+        .push({
+          name: userName,
+          score: index,
+          missType: missType,
+          timestamp: new Date().toISOString(),
+        })
+        .then(() => {
+          setHasResultPosted(true);
+          console.log("Result saved successfully.");
+        })
+        .catch((error) => {
+          console.error("Failed to save result:", error);
+        });
+    }
+  }, [gameState]);
+
   const renderContent = () => {
     const navigate = useNavigate();
     switch (gameState) {
@@ -50,7 +81,9 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
             <div className="text-xl">ミスタイプ数:{missType}</div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-              onClick={() => navigate("/")}
+              onClick={() =>
+                navigate("/", { state: { difficulty: difficulty } })
+              }
             >
               戻る
             </button>

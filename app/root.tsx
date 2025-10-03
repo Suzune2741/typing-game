@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import "../plugins/firebase.js"; 
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -32,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="mx-[3%]">
         {children}
         <ScrollRestoration />
         <Scripts />

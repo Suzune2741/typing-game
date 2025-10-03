@@ -1,8 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import Modal from "react-modal";
-import { getDifficulty } from "~/utils/getDifficulty";
 
-const DifficultySelectionModal = ({
+const DifficultySelectModal = ({
   modalIsOpen,
   setIsOpen,
   difficulty,
@@ -45,4 +44,4 @@ const DifficultySelectionModal = ({
   );
 };
 
-export default DifficultySelectionModal;
+export default DifficultySelectModal;

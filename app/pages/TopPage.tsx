@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import DifficultySelectionModal from "~/components/modals/NormalModal";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 export function TopPage() {
-  const [modalIsOpen, setIsOpen] = useState<boolean>(false);
-  const [difficulty, setDifficulty] = useState<string>("easy");
   const navigate = useNavigate();
+  const [difficulty, setDifficulty] = useState<string>("easy");
+
   const gameStart = () => {
     navigate("/play?dif=" + difficulty);
   };
-  console.log(difficulty);
+  const location = useLocation();
 
+  useEffect(() => {
+    if (location.state && location.state.difficulty)
+      setDifficulty(location.state.difficulty);
+  }, [location]);
+  
+  useEffect(() => {
+    localStorage.setItem("userName", "名無しさん");
+  }, []);
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <div className="space-y-5">
@@ -24,18 +31,14 @@ export function TopPage() {
           </button>
           <button
             className="bg-orange-400 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full"
-            onClick={() => setIsOpen(true)}
+            onClick={() =>
+              navigate("/setting", { state: { difficulty: difficulty } })
+            }
           >
-            難易度変更
+            設定
           </button>
         </div>
       </div>
-      <DifficultySelectionModal
-        modalIsOpen={modalIsOpen}
-        setIsOpen={setIsOpen}
-        difficulty={difficulty}
-        setDifficulty={setDifficulty}
-      />
     </div>
   );
 }
