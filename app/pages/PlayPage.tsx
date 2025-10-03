@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import { GameStateDisplay } from "~/components/GameStateDisplay";
 import { getDifficulty } from "~/utils/getDifficulty";
 
@@ -15,10 +14,14 @@ export function PlayPage() {
   const difficulty = getDifficulty();
   const charNum = difficulty === "easy" ? 10 : 50;
 
-  
-  const generateRandomString = (): string => {
-    const str = Math.random().toString(36).substring(2).slice(-charNum);
-    return str.length < charNum ? str + "a".repeat(charNum - str.length) : str;
+  const generateRandomString = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const charactersLength = characters.length;
+    return Array.from({ length: charNum }, () => {
+      const randomIndex = Math.floor(Math.random() * charactersLength);
+      return characters.charAt(randomIndex);
+    }).join("");
   };
 
   useEffect(() => {
@@ -47,12 +50,12 @@ export function PlayPage() {
         setGameState("ready");
         setIndex(0);
       }
-      if (gameState === "play" && problem && event.key === problem[index]) {
+      if (problem && event.key === problem[index]) {
         setIndex(index + 1);
         if (index === charNum - 1) {
           setGameState("result");
         }
-      } else {
+      } else if (gameState === "play") {
         setMissType(missType + 1);
       }
     };
