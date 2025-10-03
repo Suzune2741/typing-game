@@ -10,7 +10,8 @@ export function PlayPage() {
   const [index, setIndex] = useState<number>(0);
   const [missType, setMissType] = useState<number>(0);
   const [timeLeft, setTimeLeft] = useState<number>(3);
-
+  const [startTime, setStartTime] = useState<number>(0);
+  const [endTime, setEndTime] = useState<number>(0);
   const difficulty = getDifficulty();
   const charNum = difficulty === "easy" ? 10 : 50;
 
@@ -18,6 +19,7 @@ export function PlayPage() {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
+
     return Array.from({ length: charNum }, () => {
       const randomIndex = Math.floor(Math.random() * charactersLength);
       return characters.charAt(randomIndex);
@@ -30,6 +32,7 @@ export function PlayPage() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           setGameState("play");
+          setStartTime(performance.now());
           return 0;
         }
         return prev - 1;
@@ -53,6 +56,7 @@ export function PlayPage() {
       if (problem && event.key === problem[index]) {
         setIndex(index + 1);
         if (index === charNum - 1) {
+          setEndTime(performance.now());
           setGameState("result");
         }
       } else if (gameState === "play") {
@@ -66,7 +70,6 @@ export function PlayPage() {
       document.removeEventListener("keydown", handleKeyboard);
     };
   }, [gameState, index, problem, missType]);
-
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <GameStateDisplay
@@ -75,6 +78,7 @@ export function PlayPage() {
         index={index}
         problem={problem}
         missType={missType}
+        endTime={(Math.floor((endTime - startTime) * 100) / 100)/1000}
       />
     </div>
   );

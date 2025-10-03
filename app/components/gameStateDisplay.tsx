@@ -12,6 +12,7 @@ type GameStateProps = {
   index?: number;
   missType?: number;
   problem?: string[];
+  endTime: number;
 };
 
 export const GameStateDisplay: React.FC<GameStateProps> = ({
@@ -20,6 +21,7 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
   index = 0,
   missType = 0,
   problem = [],
+  endTime,
 }) => {
   const [hasResultPosted, setHasResultPosted] = useState(false);
   const room = "results";
@@ -79,6 +81,7 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
           <div className="space-y-5">
             <div className="text-2xl">結果</div>
             <div className="text-xl">ミスタイプ数:{missType}</div>
+            <div className="text-xl">時間:{endTime}</div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
               onClick={() =>
