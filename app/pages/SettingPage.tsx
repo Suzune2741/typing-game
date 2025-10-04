@@ -13,7 +13,7 @@ export const SettingPage = () => {
   useEffect(() => {
     setDifficulty(location.state.difficulty);
   }, [location]);
-  console.log(localStorage.getItem("userName"));
+
   const userName = getUserName("userName", "名無しさん");
 
   return (
