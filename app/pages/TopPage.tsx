@@ -14,10 +14,7 @@ export function TopPage() {
     if (location.state && location.state.difficulty)
       setDifficulty(location.state.difficulty);
   }, [location]);
-  
-  useEffect(() => {
-    localStorage.setItem("userName", "名無しさん");
-  }, []);
+
   return (
     <div className="pt-16 pb-4 flex justify-center">
       <div className="space-y-5">
@@ -28,6 +25,12 @@ export function TopPage() {
             onClick={gameStart}
           >
             遊ぶ
+          </button>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            onClick={() => navigate("/ranking")}
+          >
+            ランキング
           </button>
           <button
             className="bg-orange-400 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full"
