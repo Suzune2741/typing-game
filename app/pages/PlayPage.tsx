@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { GameStateDisplay } from "~/components/GameStateDisplay";
 import { getDifficulty } from "~/utils/getDifficulty";
 
-export type stateProp = "ready" | "countDown" | "play" | "result";
+export type StateProp = "ready" | "countDown" | "play" | "result";
 
 export function PlayPage() {
-  const [gameState, setGameState] = useState<stateProp>("ready");
+  const [gameState, setGameState] = useState<StateProp>("ready");
   const [problem, setProblem] = useState<string[]>([]);
   const [index, setIndex] = useState<number>(0);
   const [missType, setMissType] = useState<number>(0);
@@ -78,7 +78,7 @@ export function PlayPage() {
         index={index}
         problem={problem}
         missType={missType}
-        endTime={(Math.floor((endTime - startTime) * 100) / 100)/1000}
+        endTime={Math.floor((endTime - startTime) * 100) / 100 / 1000}
       />
     </div>
   );
