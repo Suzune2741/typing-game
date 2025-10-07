@@ -30,6 +30,10 @@ export const RankingPage = () => {
             resultsArray.push(resultData);
           });
           setResults(resultsArray);
+          const sortedResults = resultsArray.sort(
+            (a, b) => a.endTime - b.endTime
+          );
+          setResults(sortedResults);
 
           console.log(resultsArray);
         } else {
