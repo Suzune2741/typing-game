@@ -1,6 +1,11 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/database";
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { useNavigate } from "react-router";
 import type { StateProp } from "~/pages/PlayPage";
 import { getDifficulty } from "~/utils/getDifficulty";
@@ -8,6 +13,7 @@ import { getUserName } from "~/utils/getUserName";
 
 type GameStateProps = {
   gameState: StateProp;
+  setGameState: Dispatch<SetStateAction<StateProp>>;
   timeLeft?: number;
   index?: number;
   missType?: number;
@@ -17,6 +23,7 @@ type GameStateProps = {
 
 export const GameStateDisplay: React.FC<GameStateProps> = ({
   gameState,
+  setGameState,
   timeLeft = 3,
   index = 0,
   missType = 0,
@@ -27,7 +34,6 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
   const room = "results";
   const difficulty = getDifficulty();
   const userName = getUserName("userName", "名無しさん");
-
   useEffect(() => {
     if (gameState === "result" && firebase.apps.length && !hasResultPosted) {
       const database = firebase.database();
@@ -61,9 +67,9 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
             <div className="text-xl">スペースキーで開始</div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-              onClick={() =>
-                navigate("/", { state: { difficulty: difficulty } })
-              }
+              onClick={() => {
+                navigate("/", { state: { difficulty: difficulty } });
+              }}
             >
               戻る
             </button>
@@ -94,11 +100,12 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
             <div className="space-x-2">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                onClick={() =>
-                  navigate("/", { state: { difficulty: difficulty } })
-                }
+                onClick={() => {
+                  setGameState("ready");
+                  navigate("/play?dif=" + difficulty);
+                }}
               >
-                戻る
+                もう一回
               </button>
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
