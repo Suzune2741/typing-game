@@ -1,8 +1,0 @@
-name = "typing-game"
-compatibility_date = "2024-10-02"
-compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "build/client"
-
-[build]
-command = "npm run build"
-publish = "build/client"
