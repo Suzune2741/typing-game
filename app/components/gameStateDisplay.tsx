@@ -90,7 +90,13 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
           <div className="space-y-5">
             <div className="text-5xl">得点:{index}</div>
             <span className="text-3xl flex justify-center">
-              {problem[index]}
+              {problem.map((char, problemNum) => {
+                return problemNum < index ? (
+                  <span className="opacity-40">{char}</span>
+                ) : (
+                  <span>{char}</span>
+                );
+              })}
             </span>
           </div>
         );
