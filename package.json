@@ -6,7 +6,9 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "preview": "npx wrangler pages dev ./build/client",
+    "deploy": "npm run build && npx wrangler pages deploy ./build/client"
   },
   "dependencies": {
     "@react-router/node": "^7.9.2",
@@ -28,6 +30,7 @@
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vite": "^7.1.7",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.43.0"
   }
 }
