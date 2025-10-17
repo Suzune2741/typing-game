@@ -1,5 +1,7 @@
 import { child, get, getDatabase, onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { NormalButton } from "~/components/button";
 import { RankingTable } from "~/components/RankingTable";
 
 export type ResultDataProp = {
@@ -15,6 +17,7 @@ export const RankingPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const dbRef = ref(database);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -71,6 +74,12 @@ export const RankingPage = () => {
         <div className="text-3xl place-self-center-safe">ランキング</div>
         <div className="space-x-2"></div>
         <RankingTable rankingData={results} />
+        <NormalButton
+          displayText={"戻る"}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
       </div>
     </div>
   );

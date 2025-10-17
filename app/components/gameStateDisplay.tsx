@@ -10,6 +10,7 @@ import { useNavigate } from "react-router";
 import type { StateProp } from "~/pages/PlayPage";
 import { getDifficulty } from "~/utils/getDifficulty";
 import { getUserName } from "~/utils/getUserName";
+import { NormalButton } from "./button";
 
 type GameStateProps = {
   gameState: StateProp;
@@ -63,16 +64,14 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
       case "ready":
         return (
           <div className="space-y-5">
-            <div className="text-2xl">Typing Game</div>
+            <div className="text-3xl place-self-center-safe">Typing Game</div>
             <div className="text-xl">スペースキーで開始</div>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-              onClick={() => {
-                navigate("/", { state: { difficulty: difficulty } });
-              }}
-            >
-              戻る
-            </button>
+            <NormalButton
+              displayText="戻る"
+              onClick={() =>
+                navigate("/", { state: { difficulty: difficulty } })
+              }
+            />
           </div>
         );
       case "countDown":
@@ -98,23 +97,23 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
             <div className="text-xl">ミスタイプ数:{missType}</div>
             <div className="text-xl">時間:{endTime}</div>
             <div className="space-x-2">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              <NormalButton
+                displayText="もう一回"
                 onClick={() => {
                   setGameState("ready");
                   navigate("/play?dif=" + difficulty);
                 }}
-              >
-                もう一回
-              </button>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+              />
+              <NormalButton
+                displayText="ランキングへ"
+                onClick={() => navigate("/ranking")}
+              />
+              <NormalButton
+                displayText="戻る"
                 onClick={() =>
                   navigate("/", { state: { difficulty: difficulty } })
                 }
-              >
-                戻る
-              </button>
+              />
             </div>
           </div>
         );

@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { NormalButton } from "~/components/button";
 
 export function TopPage() {
   const navigate = useNavigate();
   const [difficulty, setDifficulty] = useState<string>("easy");
 
-  const gameStart = () => {
-    navigate("/play?dif=" + difficulty);
-  };
   const location = useLocation();
 
   useEffect(() => {
@@ -20,18 +18,14 @@ export function TopPage() {
       <div className="space-y-5">
         <div className="text-3xl place-self-center-safe">Typing Game</div>
         <div className="space-x-2">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-            onClick={gameStart}
-          >
-            遊ぶ
-          </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          <NormalButton
+            displayText="遊ぶ"
+            onClick={() => navigate("/play?dif=" + difficulty)}
+          />
+          <NormalButton
+            displayText="ランキング"
             onClick={() => navigate("/ranking")}
-          >
-            ランキング
-          </button>
+          />
           <button
             className="bg-orange-400 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-full"
             onClick={() =>
