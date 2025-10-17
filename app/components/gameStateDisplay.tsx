@@ -46,6 +46,7 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
           score: index,
           endTime: endTime,
           missType: missType,
+          difficulty: difficulty,
           timestamp: new Date().toISOString(),
         })
         .then(() => {
@@ -63,9 +64,12 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
     switch (gameState) {
       case "ready":
         return (
-          <div className="space-y-5">
-            <div className="text-3xl place-self-center-safe">Typing Game</div>
-            <div className="text-xl">スペースキーで開始</div>
+          <div className="flex flex-col items-center gap-5">
+            <div className="text-3xl">Typing Game</div>
+            <div className="text-xl ">難易度 {difficulty.toUpperCase()}</div>
+            <div className="text-xl animate-pulse">
+              スペースキーを押してスタート
+            </div>
             <NormalButton
               displayText="戻る"
               onClick={() =>

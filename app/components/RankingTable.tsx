@@ -5,7 +5,7 @@ export const RankingTable = ({
 }: {
   rankingData: ResultDataProp[];
 }) => {
-  const headValue: string[] = ["名前", "クリアタイム", "ミスタイプ数"];
+  const headValue: string[] = ["名前", "クリアタイム", "ミスタイプ数","難易度"];
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -32,6 +32,7 @@ export const RankingTable = ({
               </th>
               <td className="px-6 py-4">{element.endTime}</td>
               <td className="px-6 py-4">{element.missType}</td>
+              <td className="px-6 py-4">{element.difficulty}</td>
             </tr>
           ))}
         </tbody>

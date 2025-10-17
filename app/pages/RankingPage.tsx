@@ -9,6 +9,7 @@ export type ResultDataProp = {
   score: number;
   endTime: number;
   missType: number;
+  difficulty: string;
 };
 
 export const RankingPage = () => {

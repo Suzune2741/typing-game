@@ -16,8 +16,7 @@ export function PlayPage() {
   const charNum = difficulty === "easy" ? 10 : 50;
 
   const generateRandomString = () => {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
     const charactersLength = characters.length;
 
     return Array.from({ length: charNum }, () => {
@@ -41,19 +40,22 @@ export function PlayPage() {
 
     return () => clearInterval(timer);
   }, [gameState]);
-
+  const initData = () => {
+    setIndex(0);
+    setMissType(0);
+    setProblem(generateRandomString().split(""));
+    setTimeLeft(3);
+  };
   useEffect(() => {
     const handleKeyboard = (event: KeyboardEvent) => {
       if (gameState === "ready" && event.code === "Space") {
-        setProblem(generateRandomString().split(""));
-        setTimeLeft(3);
+        initData();
         setGameState("countDown");
       }
       if (event.code === "Escape") {
         setGameState("ready");
-        setIndex(0);
       }
-      if (problem && event.key === problem[index]) {
+      if (event.key === problem[index]) {
         setIndex(index + 1);
         if (index === charNum - 1) {
           setEndTime(performance.now());
