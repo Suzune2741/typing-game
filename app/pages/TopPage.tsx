@@ -19,8 +19,12 @@ export function TopPage() {
         <div className="text-3xl place-self-center-safe">Typing Game</div>
         <div className="space-x-2">
           <NormalButton
-            displayText="遊ぶ"
+            displayText="通常モード"
             onClick={() => navigate("/play?dif=" + difficulty)}
+          />
+          <NormalButton
+            displayText="タイムアタックモード"
+            onClick={() => navigate("/play?mode=timeAttack")}
           />
           <NormalButton
             displayText="ランキング"

@@ -8,57 +8,76 @@ import React, {
 } from "react";
 import { useNavigate } from "react-router";
 import type { StateProp } from "~/pages/PlayPage";
-import { getDifficulty } from "~/utils/getDifficulty";
+import { getQueryParameter } from "~/utils/getQueryParameters";
 import { getUserName } from "~/utils/getUserName";
 import { NormalButton } from "./button";
 
 type GameStateProps = {
   gameState: StateProp;
+  gameMode: string;
   setGameState: Dispatch<SetStateAction<StateProp>>;
-  timeLeft?: number;
-  index?: number;
-  missType?: number;
-  problem?: string[];
+  timeLeft: number;
+  index: number;
+  missType: number;
+  problem: string[];
   endTime: number;
 };
 
 export const GameStateDisplay: React.FC<GameStateProps> = ({
   gameState,
+  gameMode,
   setGameState,
-  timeLeft = 3,
-  index = 0,
-  missType = 0,
+  timeLeft,
+  index,
+  missType,
   problem = [],
   endTime,
 }) => {
   const [hasResultPosted, setHasResultPosted] = useState(false);
-  const room = "results";
-  const difficulty = getDifficulty();
+  const difficulty = getQueryParameter("dif", "easy");
   const userName = getUserName("userName", "名無しさん");
+  const room = "result-" + gameMode;
+  const [sendResult, setSendResult] = useState<boolean>(false);
   useEffect(() => {
-    if (gameState === "result" && firebase.apps.length && !hasResultPosted) {
+    if (sendResult && firebase.apps.length && !hasResultPosted) {
       const database = firebase.database();
-
-      database
-        .ref(room)
-        .push({
-          name: userName,
-          score: index,
-          endTime: endTime,
-          missType: missType,
-          difficulty: difficulty,
-          timestamp: new Date().toISOString(),
-        })
-        .then(() => {
-          setHasResultPosted(true);
-          console.log("Result saved successfully.");
-        })
-        .catch((error) => {
-          console.error("Failed to save result:", error);
-        });
+      if (gameMode === "normal") {
+        database
+          .ref(room)
+          .push({
+            name: userName,
+            endTime: endTime,
+            missType: missType,
+            difficulty: difficulty,
+            timestamp: new Date().toISOString(),
+          })
+          .then(() => {
+            setHasResultPosted(true);
+            console.log("Result saved successfully.");
+          })
+          .catch((error) => {
+            console.error("Failed to save result:", error);
+          });
+      } else if (gameMode === "timeAttack") {
+        database
+          .ref(room)
+          .push({
+            name: userName,
+            score: index,
+            missType: missType,
+            timestamp: new Date().toISOString(),
+          })
+          .then(() => {
+            setHasResultPosted(true);
+            console.log("Result saved successfully.");
+          })
+          .catch((error) => {
+            console.error("Failed to save result:", error);
+          });
+      }
+      setSendResult(false);
     }
-  }, [gameState]);
-
+  }, [sendResult]);
   const renderContent = () => {
     const navigate = useNavigate();
     switch (gameState) {
@@ -66,7 +85,12 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
         return (
           <div className="flex flex-col items-center gap-5">
             <div className="text-3xl">Typing Game</div>
-            <div className="text-xl ">難易度 {difficulty.toUpperCase()}</div>
+
+            {gameMode == "normal" ? (
+              <div className="text-xl ">難易度 {difficulty.toUpperCase()}</div>
+            ) : (
+              <div className="text-xl ">タイムアタック</div>
+            )}
             <div className="text-xl animate-pulse">
               スペースキーを押してスタート
             </div>
@@ -89,9 +113,13 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
         return (
           <div className="space-y-5">
             <div className="text-5xl">得点:{index}</div>
+            {gameMode === "timeAttack" && (
+              <div className="text-5xl">残り時間:{timeLeft}</div>
+            )}
+
             <span className="text-3xl flex justify-center">
               {problem.map((char, problemNum) => {
-                return problemNum < index ? (
+                return problemNum < index % 10 ? (
                   <span className="opacity-40">{char}</span>
                 ) : (
                   <span>{char}</span>
@@ -105,13 +133,24 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
           <div className="space-y-5">
             <div className="text-2xl">結果</div>
             <div className="text-xl">ミスタイプ数:{missType}</div>
-            <div className="text-xl">時間:{endTime}</div>
+
+            {gameMode === "normal" ? (
+              <div className="text-xl">時間:{endTime}</div>
+            ) : (
+              <div className="text-xl">得点:{index + 1}</div>
+            )}
             <div className="space-x-2">
               <NormalButton
                 displayText="もう一回"
                 onClick={() => {
                   setGameState("ready");
                   navigate("/play?dif=" + difficulty);
+                }}
+              />
+              <NormalButton
+                displayText="データをランキングに登録"
+                onClick={() => {
+                  setSendResult(true);
                 }}
               />
               <NormalButton

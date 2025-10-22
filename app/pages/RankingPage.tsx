@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { NormalButton } from "~/components/button";
 import { RankingTable } from "~/components/RankingTable";
-
 export type ResultDataProp = {
   name: string;
   score: number;
@@ -19,12 +18,13 @@ export const RankingPage = () => {
   const [error, setError] = useState<string | null>(null);
   const dbRef = ref(database);
   const navigate = useNavigate();
-
+  const [gameMode, setGameMode] = useState<string>("normal");
   useEffect(() => {
     const fetchResults = async () => {
       try {
         setLoading(true);
-        const snapshot = await get(child(dbRef, `results`));
+        const room = "result-" + gameMode;
+        const snapshot = await get(child(dbRef, room));
 
         if (snapshot.exists()) {
           const resultsArray: ResultDataProp[] = [];
@@ -52,7 +52,7 @@ export const RankingPage = () => {
       }
     };
     fetchResults();
-  }, [dbRef]);
+  }, [dbRef, gameMode]);
 
   if (loading) {
     return (
@@ -73,8 +73,17 @@ export const RankingPage = () => {
     <div className="pt-16 pb-4 flex justify-center">
       <div className="space-y-5">
         <div className="text-3xl place-self-center-safe">ランキング</div>
-        <div className="space-x-2"></div>
-        <RankingTable rankingData={results} />
+        <div className="flex justify-center   gap-3">
+          <NormalButton
+            displayText={"通常モード"}
+            onClick={() => setGameMode("normal")}
+          />
+          <NormalButton
+            displayText={"タイムアタックモード"}
+            onClick={() => setGameMode("timeAttack")}
+          />
+        </div>
+        <RankingTable rankingData={results} gameMode={gameMode} />
         <NormalButton
           displayText={"戻る"}
           onClick={() => {

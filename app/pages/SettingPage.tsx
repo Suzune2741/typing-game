@@ -6,7 +6,8 @@ import { getUserName } from "~/utils/getUserName";
 
 export const SettingPage = () => {
   const [openNameModal, setOpenNameModal] = useState<boolean>(false);
-  const [openDifficultyModal, setOpenDifficultyModal] = useState<boolean>(false);
+  const [openDifficultyModal, setOpenDifficultyModal] =
+    useState<boolean>(false);
   const [difficulty, setDifficulty] = useState<string>("easy");
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const SettingPage = () => {
     <div className="pt-16 pb-4">
       <div className="text-3xl place-self-center-safe mb-5">設定</div>
       <div className="flex gap-3 justify-center mb-4">
-        ユーザー名:{" "}{userName}
+        ユーザー名: {userName}
         <button onClick={() => setOpenNameModal(true)}>
           <svg
             className="w-6 h-6 text-gray-800 dark:text-white hover:text-gray-600"

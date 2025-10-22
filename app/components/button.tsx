@@ -1,6 +1,6 @@
 interface ButtonProps {
   displayText: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 export const NormalButton: React.FC<ButtonProps> = (props) => {
   return (
