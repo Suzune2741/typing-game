@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
+    "build": "vite build",
     "dev": "react-router dev",
     "start": "wrangler dev",
     "deploy": "wrangler deploy",
@@ -20,7 +20,7 @@
     "isbot": "^5.1.31",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-modal": "^3.16.3",
+    "react-modal": "3.16.3",
     "react-router": "^7.9.2"
   },
   "devDependencies": {
