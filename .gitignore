@@ -2,7 +2,8 @@
 .env
 .env.local
 /node_modules/
-
+.eslintignore
+.dev.vars
 # React Router
 /.react-router/
 /build/
@@ -10,6 +11,5 @@
 # Cloudflare
 .wrangler/
 wrangler.toml.bak
-
 # Logs
 *.log

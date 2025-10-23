@@ -1,5 +1,6 @@
 {
   "include": [
+    "worker-configuration.d.ts",
     "**/*",
     "**/.server/**/*",
     "**/.client/**/*",
@@ -7,7 +8,10 @@
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["node", "vite/client"],
+    "types": ["node",
+    "@react-router/cloudflare",
+    "@cloudflare/workers-types",
+    "vite/client"],
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "bundler",
