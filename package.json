@@ -11,6 +11,7 @@
     "deploy": "npm run build && npx wrangler pages deploy ./build/client"
   },
   "dependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.9.14",
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
     "firebase": "^12.3.0",
