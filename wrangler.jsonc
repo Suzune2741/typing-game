@@ -5,7 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "typing-game",
-	"main": "src/index.ts",
+	"main": "app/root.tsx",
 	"compatibility_date": "2025-10-23",
 	"observability": {
 		"enabled": true
