@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "react-router build",
     "dev": "react-router dev",
     "start": "wrangler dev",
     "deploy": "wrangler deploy",
@@ -14,14 +14,12 @@
   "dependencies": {
     "@cloudflare/vitest-pool-workers": "^0.9.14",
     "@react-router/cloudflare": "^7.9.4",
-    "@react-router/node": "^7.9.2",
-    "@react-router/serve": "^7.9.2",
     "firebase": "^12.3.0",
     "isbot": "^5.1.31",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-modal": "^3.16.3",
-    "react-router": "^7.9.2"
+    "react-router": "^7.9.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251014.0",
