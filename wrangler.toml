@@ -1,7 +1,4 @@
 name = "typing-game"
 compatibility_date = "2024-10-23" 
 
-[pages]
-assets = "build/client"
-functions_output_dir = "build/client"
-
+pages_build_output_dir = "build/client"
