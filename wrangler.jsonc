@@ -1,0 +1,20 @@
+
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "my-react-router-app",
+    "compatibility_date": "2025-10-28",
+    "main": "workers/app.ts",
+    
+    "observability": {
+        "enabled": true
+    },
+    "assets": {
+      "binding": "ASSETS",
+      "directory": "./build/client",
+      "not_found_handling": "single-page-application"
+    },
+    "vite": {
+      "config": "vite.config.ts"
+    }
+}
+
