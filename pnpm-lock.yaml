@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  dataconnect-generated: link:../../../Users/kannr/AppData/Local/pnpm/global/5/node_modules/src/dataconnect-generated
+
 importers:
 
   .:

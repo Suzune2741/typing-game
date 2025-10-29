@@ -3,3 +3,5 @@ ignoredBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
   - protobufjs
+overrides:
+  dataconnect-generated: link:../../../Users/kannr/AppData/Local/pnpm/global/5/node_modules/src/dataconnect-generated

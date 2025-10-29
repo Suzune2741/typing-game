@@ -5,8 +5,10 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [cloudflare(), tailwindcss(), reactRouter(), tsconfigPaths()],
-  build: {
-    outDir: "build",
-  },
+  plugins: [
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
+    tailwindcss(),
+    reactRouter(),
+    tsconfigPaths(),
+  ],
 });
