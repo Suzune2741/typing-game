@@ -11,7 +11,7 @@ import type { StateProp } from "~/pages/PlayPage";
 import { getQueryParameter } from "~/utils/getQueryParameters";
 import { getUserName } from "~/utils/getUserName";
 import { NormalButton } from "./button";
-
+import { getAuth } from "firebase/auth";
 type GameStateProps = {
   gameState: StateProp;
   gameMode: string;
@@ -38,13 +38,22 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
   const userName = getUserName("userName", "名無しさん");
   const room = "result-" + gameMode;
   const [sendResult, setSendResult] = useState<boolean>(false);
+  const auth = getAuth();
   useEffect(() => {
+    const currentUser = auth.currentUser;
     if (sendResult && firebase.apps.length && !hasResultPosted) {
+      if (!currentUser) {
+        console.error("ユーザーが認証されていません。");
+        setSendResult(false);
+        return;
+      }
+      const uid = currentUser.uid;
       const database = firebase.database();
       if (gameMode === "normal") {
         database
           .ref(room)
           .push({
+            uid: uid,
             name: userName,
             endTime: endTime,
             missType: missType,
@@ -62,6 +71,7 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
         database
           .ref(room)
           .push({
+            uid: uid,
             name: userName,
             score: index,
             missType: missType,
@@ -77,7 +87,7 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
       }
       setSendResult(false);
     }
-  }, [sendResult]);
+  }, [sendResult, hasResultPosted, auth.currentUser]);
   const renderContent = () => {
     const navigate = useNavigate();
     switch (gameState) {
