@@ -1,29 +1,23 @@
-import {
-  createRequestHandler,
-  handleAsset,
-} from "virtual:react-router/fetch-handler";
-import * as build from "virtual:react-router/server-build";
+import { createRequestHandler } from "react-router";
 
-const handleRequest = createRequestHandler(build);
+declare module "react-router" {
+  export interface AppLoadContext {
+    cloudflare: {
+      env: Env;
+      ctx: ExecutionContext;
+    };
+  }
+}
+
+const requestHandler = createRequestHandler(
+  () => import("virtual:react-router/server-build"),
+  import.meta.env.MODE
+);
 
 export default {
-  async fetch(
-    request: Request,
-    env: { ASSETS: Fetcher; [key: string]: unknown },
-    ctx: ExecutionContext
-  ): Promise<Response> {
-    try {
-      const assetResponse = await handleAsset(request, env, ctx);
-      if (assetResponse) {
-        return assetResponse;
-      }
-
-      return await handleRequest(request, env, ctx);
-    } catch (error) {
-      console.error(error);
-      const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
-      return new Response(errorMessage, { status: 500 });
-    }
+  async fetch(request, env, ctx) {
+    return requestHandler(request, {
+      cloudflare: { env, ctx },
+    });
   },
-};
-
+} satisfies ExportedHandler<Env>;

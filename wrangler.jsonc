@@ -5,5 +5,8 @@
   "main": "./workers/app.ts",
   "vars": {
     "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
-  }
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
 }
