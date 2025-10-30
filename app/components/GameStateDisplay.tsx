@@ -1,4 +1,3 @@
-import firebase from "firebase/compat/app";
 import "firebase/compat/database";
 import React, {
   useEffect,
@@ -11,7 +10,8 @@ import type { StateProp } from "~/pages/PlayPage";
 import { getQueryParameter } from "~/utils/getQueryParameters";
 import { getUserName } from "~/utils/getUserName";
 import { NormalButton } from "./button";
-import { getAuth } from "firebase/auth";
+import { getAuth, signInAnonymously, type User } from "firebase/auth";
+import { getDatabase, push, ref } from "firebase/database";
 type GameStateProps = {
   gameState: StateProp;
   gameMode: string;
@@ -38,56 +38,76 @@ export const GameStateDisplay: React.FC<GameStateProps> = ({
   const userName = getUserName("userName", "名無しさん");
   const room = "result-" + gameMode;
   const [sendResult, setSendResult] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<User | null>();
   const auth = getAuth();
+
+  const database = getDatabase();
+
   useEffect(() => {
-    const currentUser = auth.currentUser;
-    if (sendResult && firebase.apps.length && !hasResultPosted) {
-      if (!currentUser) {
-        console.error("ユーザーが認証されていません。");
-        setSendResult(false);
+    const saveResult = async () => {
+      if (!sendResult || hasResultPosted) {
         return;
       }
-      const uid = currentUser.uid;
-      const database = firebase.database();
-      if (gameMode === "normal") {
-        database
-          .ref(room)
-          .push({
+
+      try {
+        setCurrentUser(auth.currentUser);
+
+        if (!currentUser) {
+          console.log("ユーザー未認証のため、匿名サインインを実行します...");
+          const userCredential = await signInAnonymously(auth);
+          setCurrentUser(userCredential.user);
+        }
+
+        if (!currentUser) {
+          throw new Error("ユーザー認証に失敗しました。");
+        }
+
+        const uid = currentUser.uid;
+
+        if (gameMode === "normal") {
+          const dataToSend = {
             uid: uid,
             name: userName,
-            endTime: endTime,
             missType: missType,
+            endTime: endTime,
             difficulty: difficulty,
             timestamp: new Date().toISOString(),
-          })
-          .then(() => {
-            setHasResultPosted(true);
-            console.log("Result saved successfully.");
-          })
-          .catch((error) => {
-            console.error("Failed to save result:", error);
-          });
-      } else if (gameMode === "timeAttack") {
-        database
-          .ref(room)
-          .push({
+          };
+          const roomRef = ref(database, room);
+          await push(roomRef, dataToSend);
+        } else if (gameMode === "timeAttack") {
+          const dataToSend = {
             uid: uid,
             name: userName,
-            score: index,
             missType: missType,
+            score: index,
             timestamp: new Date().toISOString(),
-          })
-          .then(() => {
-            setHasResultPosted(true);
-            console.log("Result saved successfully.");
-          })
-          .catch((error) => {
-            console.error("Failed to save result:", error);
-          });
+          };
+          const roomRef = ref(database, room);
+          await push(roomRef, dataToSend);
+        }
+
+        setHasResultPosted(true);
+        console.log("Result saved successfully.");
+      } catch (error) {
+        console.error("Failed to save result:", error);
+      } finally {
+        setSendResult(false);
       }
-      setSendResult(false);
-    }
-  }, [sendResult, hasResultPosted, auth.currentUser]);
+    };
+
+    saveResult();
+  }, [
+    sendResult,
+    hasResultPosted,
+    room,
+    gameMode,
+    userName,
+    endTime,
+    missType,
+    difficulty,
+    index,
+  ]);
   const renderContent = () => {
     const navigate = useNavigate();
     switch (gameState) {
