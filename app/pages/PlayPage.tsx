@@ -15,7 +15,6 @@ export function PlayPage() {
   const gameMode = getQueryParameter("mode", "normal");
   const difficulty = getQueryParameter("dif", "easy");
   const charNum = gameMode == "timeAttack" || difficulty === "easy" ? 10 : 50;
-  console.log(gameMode);
 
   const generateRandomString = () => {
     const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -28,16 +27,15 @@ export function PlayPage() {
   };
 
   useEffect(() => {
-
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          if (gameMode === "normal") {
+          if (gameMode === "normal" && gameState === "countDown") {
             setGameState("play");
             setStartTime(performance.now());
           } else if (gameMode === "timeAttack" && gameState !== "countDown") {
             setGameState("result");
-          } else {
+          } else if (gameState === "countDown") {
             setGameState("play");
             setTimeLeft(10);
           }
@@ -63,9 +61,8 @@ export function PlayPage() {
       if (event.code === "Escape") {
         setGameState("ready");
       }
-      if (event.key === problem[index % 10]) {
+      if (gameState === "play" && event.key === problem[index % 10]) {
         setIndex(index + 1);
-        console.log(gameMode);
         if (index === charNum - 1 && gameMode === "normal") {
           setEndTime(performance.now());
           setGameState("result");
