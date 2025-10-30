@@ -1,8 +1,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/database"; 
-
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_ApiKey,
+  apiKey: import.meta.env.VITE_apiKey,
   authDomain: import.meta.env.VITE_authDomain,
   databaseURL: import.meta.env.VITE_databaseURL,
   projectId: import.meta.env.VITE_projectId,

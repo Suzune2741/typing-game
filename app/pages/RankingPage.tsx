@@ -1,4 +1,4 @@
-import { child, get, getDatabase, onValue, ref } from "firebase/database";
+import { child, get, getDatabase, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { NormalButton } from "~/components/button";
